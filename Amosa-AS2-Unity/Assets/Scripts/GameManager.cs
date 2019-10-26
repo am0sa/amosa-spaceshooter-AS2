@@ -41,22 +41,22 @@ public class GameManager : MonoBehaviour
         shipController = new List<ShipController>();
     }
 
-    void Start() 
-    {
-        SpawnShips();
-    }
+    // void Start() 
+    // {
+    //     SpawnShips();
+    // }
 
     // Update is called once per frame
-    void FixedUpdate()
-    {
-        gameTimer += Time.deltaTime;
-        randomIntMax3 = Random.Range(0,3);
-        if (((int)gameTimer % 10) == 0 && gameTimer < ((int)gameTimer + Time.deltaTime))
-        {
-            SpawnShips(1, randomIntMax3);
-            Debug.Log("New Enemy");
-        }
-    }
+    // void FixedUpdate()
+    // {
+    //     gameTimer += Time.deltaTime;
+    //     randomIntMax3 = Random.Range(0,3);
+    //     if (((int)gameTimer % 10) == 0 && gameTimer < ((int)gameTimer + Time.deltaTime))
+    //     {
+    //         SpawnShips(1, randomIntMax3);
+    //         Debug.Log("New Enemy");
+    //     }
+    // }
 
     public void SpawnShips(int spawnCount = 1, int index =0)
     {
