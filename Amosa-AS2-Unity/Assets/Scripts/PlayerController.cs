@@ -15,14 +15,14 @@ public class PlayerController : MonoBehaviour
     public int scoreEarned;
     
     public float blinkRecharge;
-
     public float RECHARGE_TIME;
+    public float cannonChargeTimer;
+    public float rapidFireDelay;
 
     public bool blinkIsCharging;
 
     public bool cannonCharge;
 
-    public float cannonChargeTimer;
 
     public enum PowerLevel
     {
@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerSpeed = 1f;
+        playerSpeed = 5f;
         cannonChargeTimer = 0f;
         RECHARGE_TIME = 3f;
     }
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
 
     public bool Blink(Vector2 movementDir)
     {
-        Vector2 destination = playerSpeed * ((Vector2)transform.position + movementDir);
+        Vector2 destination = ((Vector2)transform.position + playerSpeed * playerSpeed * movementDir);
         if ((Vector2)transform.position == destination)
         {
             return false;
@@ -134,7 +134,15 @@ public class PlayerController : MonoBehaviour
 
     public void Shoot()
     {
-        //Instantiate rapidfire bullets
+        if (rapidFireDelay <=0)
+        {
+            Shoot(0);
+            rapidFireDelay = RECHARGE_TIME / 10;
+        }
+        else
+        {
+            rapidFireDelay -= Time.deltaTime;
+        }
     }
 
     public void Shoot(int pow)
@@ -146,9 +154,36 @@ public class PlayerController : MonoBehaviour
         }
         else if (pow >=2 )
         {
-            
+            shotPower = PowerLevel.three;
+        }
+        else if (pow >=1)
+        {
+            shotPower = PowerLevel.two;
         }
 
+        switch (shotPower)
+        {
+            //Instantiate powLevel bullets/beams
+
+            case PowerLevel.one:
+                break;
+
+            case PowerLevel.two:
+
+                break;
+
+            case PowerLevel.three:
+
+                break;
+
+            case PowerLevel.super:
+
+                break;
+
+
+            default:
+                break;
+        }
     }
 
 
