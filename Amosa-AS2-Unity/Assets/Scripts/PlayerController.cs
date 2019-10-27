@@ -9,8 +9,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] protected int hitPoints;
 
     public GameManager gameManager;
-
     public Animator animator;
+    public GameObject bullet1;
+    public GameObject bullet2;
+    public GameObject bullet3;
+    public GameObject bulletSuper;
 
     public int scoreEarned;
     
@@ -20,9 +23,7 @@ public class PlayerController : MonoBehaviour
     public float rapidFireDelay;
 
     public bool blinkIsCharging;
-
     public bool cannonCharge;
-
 
     public enum PowerLevel
     {
@@ -32,7 +33,6 @@ public class PlayerController : MonoBehaviour
         super
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         playerSpeed = 5f;
@@ -40,7 +40,6 @@ public class PlayerController : MonoBehaviour
         RECHARGE_TIME = 3f;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         if (blinkIsCharging)
@@ -52,7 +51,6 @@ public class PlayerController : MonoBehaviour
                 blinkIsCharging = false;
             } 
         }
-
 
         var movementDir = new Vector2(0, 0);
 
@@ -164,7 +162,6 @@ public class PlayerController : MonoBehaviour
         switch (shotPower)
         {
             //Instantiate powLevel bullets/beams
-
             case PowerLevel.one:
                 break;
 
