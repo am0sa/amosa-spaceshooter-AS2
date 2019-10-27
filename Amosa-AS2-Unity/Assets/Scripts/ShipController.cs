@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ShipController : MonoBehaviour
 {
+    // GameManager - manages active objects, ui, persistent data
+
     public enum ShipState
     {
         ENTRY, //Everything between instantiation and the turning point
@@ -15,12 +17,9 @@ public class ShipController : MonoBehaviour
     public ShipState shipState; 
     private GameManager gameManager;
     private Formation formation;
+    public bool kamikazeEnabled;
 
     //movement variables
-    public float yPos;
-    public float xPos;
-    public float yRot1;
-    public float yRot2;
     public float shipSpeed;
     public float radius;
     public float rotationSpeed;
@@ -34,6 +33,18 @@ public class ShipController : MonoBehaviour
     public GameObject formationHolder;
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if (tag != "Drone")
+        {
+            kamikazeEnabled = false;
+        }
+        else
+        {
+            kamikazeEnabled = true;
+        }
+    }
+
     public void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -47,11 +58,6 @@ public class ShipController : MonoBehaviour
 
     void FixedUpdate() //Update ship positions, next active waypoint, 
     {
-        yPos = transform.position.z;
-        xPos = transform.position.x;
-        yRot2 = yRot1;
-        yRot1 = transform.rotation.y;
-
         switch (shipState)
         {
             case ShipState.ENTRY:

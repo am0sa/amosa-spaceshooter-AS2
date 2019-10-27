@@ -118,7 +118,18 @@ MonoBehaviour:
   hitPoints: 0
   gameManager: {fileID: 0}
   animator: {fileID: 2427940674303246046}
+  bullet1: {fileID: 8786659281402499584, guid: 9288d3cb41a73404f92b2db07ffe3b33, type: 3}
+  bullet2: {fileID: 2602619898550413392, guid: e69d17bd0f9584414a11dfe1d67a4718, type: 3}
+  bullet3: {fileID: 2656591665399083126, guid: 2807f8e270f5642d6b7b3b991b93b4a7, type: 3}
+  bulletSuper: {fileID: 2803265098350686564, guid: 9726ac20cdccf4245902466b8d20b4ae,
+    type: 3}
   scoreEarned: 0
+  blinkRecharge: 0
+  RECHARGE_TIME: 0
+  cannonChargeTimer: 0
+  rapidFireDelay: 0
+  blinkIsCharging: 0
+  cannonCharge: 0
 --- !u!61 &2427940674303246018
 BoxCollider2D:
   m_ObjectHideFlags: 0
