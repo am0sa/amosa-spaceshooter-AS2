@@ -25,12 +25,10 @@ public class ShipController : MonoBehaviour
     public float rotationSpeed;
     private float chargeTimer;
     private float chargeTrigger;
-    public Rigidbody rigidBody;
+    public Rigidbody2D rigidBody;
 
+    public GameObject player;
 
-    //Ship Formation Variables
-    public bool isInFormation;
-    public GameObject formationHolder;
 
     // Start is called before the first frame update
     private void Awake()
@@ -48,11 +46,11 @@ public class ShipController : MonoBehaviour
     public void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        shipState = ShipState.ENTRY;
-        rigidBody = GetComponent<Rigidbody>();
-        isInFormation = false;
-        shipSpeed = 4f;
-        chargeTimer = 4.5f;
+        player = GameObject.Find("Player");
+        shipState = ShipState.CHARGE;
+        rigidBody = GetComponent<Rigidbody2D>();
+        shipSpeed = 1.3f;
+        chargeTimer = 514.5f;
         chargeTrigger = 5.0f;
     }
 
@@ -69,7 +67,7 @@ public class ShipController : MonoBehaviour
                 break;
 
             case ShipState.CHARGE:
-
+                Charge(player);
                 break;
 
             case ShipState.RAGE:
@@ -85,7 +83,7 @@ public class ShipController : MonoBehaviour
     {
         Vector2 moveTo = new Vector2(0, 0);
 
-        if (Vector2.Distance(player.transform.position, transform.position) > 0.4f)
+        if (Vector2.Distance(player.transform.position, transform.position) > 0.05f)
         {
             if (chargeTimer <= 0)
             {
@@ -94,20 +92,23 @@ public class ShipController : MonoBehaviour
             else
             {
                 moveTo = Vector2.MoveTowards(transform.position, player.transform.position, shipSpeed * Time.deltaTime);
+                transform.LookAt(player.transform.position);
                 chargeTimer -= Time.deltaTime;
             }
         }
-        else if (Vector2.Distance(player.transform.position, transform.position) <= 0.4f)
+        else if (Vector2.Distance(player.transform.position, transform.position) <= 0.05f)
         {
             Kamikaze();
+            player.GetComponent<PlayerController>().hitPoints = 0;
         }
+
+        MoveShip(moveTo);
+        //transform.position = (Vector3)moveTo;
     }
 
-    public void MoveShip(Vector3 destinationPoint) //Moves in a straight line towards point.
+    public void MoveShip(Vector2 destinationPoint) //Moves in a straight line towards point.
     {
-        transform.LookAt(destinationPoint);
-        Vector3 targetPosition = Vector3.MoveTowards(transform.position, destinationPoint, shipSpeed * Time.deltaTime);
-        rigidBody.MovePosition(targetPosition);
+        rigidBody.MovePosition(destinationPoint);
     }
 
     public void Kamikaze()
@@ -115,5 +116,13 @@ public class ShipController : MonoBehaviour
         //shipExplode hasn't been figured out yet
         Debug.Log("KAMIKAZE!");
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) 
+    {
+        if (other.gameObject.layer == 10)
+        {
+            player.GetComponent<PlayerController>().scoreEarned += 10;
+        }
     }
 }

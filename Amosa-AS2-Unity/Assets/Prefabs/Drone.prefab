@@ -259,6 +259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8814213439791836169}
   - component: {fileID: 6330364120954464374}
+  - component: {fileID: 4994754373229587542}
   m_Layer: 11
   m_Name: Drone
   m_TagString: Untagged
@@ -301,5 +302,25 @@ MonoBehaviour:
   radius: 0
   rotationSpeed: 0
   rigidBody: {fileID: 0}
-  isInFormation: 0
-  formationHolder: {fileID: 0}
+  player: {fileID: 0}
+--- !u!50 &4994754373229587542
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8814213439791836168}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

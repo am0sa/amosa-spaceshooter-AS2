@@ -17,4 +17,25 @@ public class Bullet1 : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    void OnCollisionEnter(Collision other) 
+    {
+        if (other.gameObject.layer == 11)
+        {
+            Destroy(other.gameObject);
+        }
+
+        if(other.gameObject.layer == 13)
+        {
+            if (other.gameObject.GetComponent<PlayerController>())
+            {
+                other.gameObject.GetComponent<PlayerController>().hitPoints--;
+            }
+            else
+            {
+                Debug.Log("Critical Error MF");
+            }
+        }
+        Destroy(gameObject);
+    }
 }

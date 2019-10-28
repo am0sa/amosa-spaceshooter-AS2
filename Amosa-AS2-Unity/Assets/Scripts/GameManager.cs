@@ -4,26 +4,25 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject shipPrefab;  
-    public GameObject m_tempShip;
+    public GameObject dronePrefab;
+    public PlayerController player;
     public Transform defaultFormation;
     public float gameTimer;
 
-
-    // Start is called before the first frame update
-    void Awake()
-    {
-        gameTimer = 0f;
-    }
-
     void Start() 
     {
-        //SpawnShips();
+        gameTimer = 0f;
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
-    void FixedUpdate()
+    void Update()
     {
         gameTimer += Time.deltaTime;
+
+        if (player.hitPoints <= 0)
+        {
+            player.gameObject.SetActive(false);
+        }
     }
 
     public void SpawnShips(int spawnCount = 1, int index =0)
@@ -34,7 +33,6 @@ public class GameManager : MonoBehaviour
             switch (index)
             {
                 case 0:
-                    m_tempShip = Instantiate(shipPrefab, new Vector3(-18, 0, (40 + 2)), Quaternion.Euler(new Vector3(0, 180, 0)));
                     break;
 
                 default:

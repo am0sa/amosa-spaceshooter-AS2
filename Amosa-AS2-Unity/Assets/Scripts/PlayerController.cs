@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float playerSpeed;
     [SerializeField] private float bulletOffset;
 
-    protected int hitPoints;
+    public int hitPoints { get; set; }
 
     public GameManager gameManager;
     public Animator animator;
@@ -17,10 +17,14 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletSuper;
     private Transform forwardHolder;
 
+    private PlayerPrefs score;
+    private PlayerPrefs playCount;
+
     public Vector2 forward;
 
     public int scoreEarned;
-    
+    public int playCounter;
+
     public float blinkRecharge;
     public float RECHARGE_TIME;
     public float cannonChargeTimer;
@@ -41,6 +45,16 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        if (PlayerPrefs.GetInt("playCount") == 0)
+        {
+            playCounter = 1;
+        }
+        else
+        {
+            playCounter = PlayerPrefs.GetInt("playCount");
+            playCounter++;
+        }
+        PlayerPrefs.SetInt("playCount", playCounter);
         hitPoints = 2;
         playerSpeed = 3f;
         cannonChargeTimer = 0f;
@@ -77,8 +91,6 @@ public class PlayerController : MonoBehaviour
         }
 
         var movementDir = new Vector2(0, 0);
-
-
 
         if (Input.GetAxis("Horizontal") > 0)
         {
