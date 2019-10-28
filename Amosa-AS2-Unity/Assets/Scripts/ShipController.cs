@@ -49,7 +49,7 @@ public class ShipController : MonoBehaviour
         player = GameObject.Find("Player");
         shipState = ShipState.CHARGE;
         rigidBody = GetComponent<Rigidbody2D>();
-        shipSpeed = 1.3f;
+        shipSpeed = 1f;
         chargeTimer = 514.5f;
         chargeTrigger = 5.0f;
     }
@@ -95,6 +95,11 @@ public class ShipController : MonoBehaviour
                 transform.LookAt(player.transform.position);
                 chargeTimer -= Time.deltaTime;
             }
+
+            if (player.transform.position.y != transform.position.y)
+            {
+                moveTo += new Vector2(0, (player.transform.position.y - transform.position.y) * Time.deltaTime * 2);
+            }
         }
         else if (Vector2.Distance(player.transform.position, transform.position) <= 0.05f)
         {
@@ -118,11 +123,11 @@ public class ShipController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D other) 
-    {
-        if (other.gameObject.layer == 10)
-        {
-            player.GetComponent<PlayerController>().scoreEarned += 10;
-        }
-    }
+    // private void OnCollisionEnter2D(Collider2D other) 
+    // {
+    //     if (other.gameObject.layer == 10)
+    //     {
+    //         player.GetComponent<PlayerController>().scoreEarned += 10;
+    //     }
+    // }
 }

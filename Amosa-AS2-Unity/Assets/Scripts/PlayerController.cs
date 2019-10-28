@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         isFacingRight = animator.GetBool("isFacingRight");
+        Debug.Log(scoreEarned);
     }
 
     void Update() 
@@ -141,7 +142,6 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.C) && !Input.GetKey(KeyCode.Space))
         {
-            Debug.Log("SpaceUp)");
             int pow = (int)(cannonChargeTimer * 2.5);
             Shoot(pow);
             cannonChargeTimer = 0;

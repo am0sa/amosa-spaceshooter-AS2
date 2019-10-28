@@ -248,6 +248,7 @@ MonoBehaviour:
     type: 3}
   forward: {x: 0, y: 0}
   scoreEarned: 0
+  playCounter: 0
   blinkRecharge: 0
   RECHARGE_TIME: 0
   cannonChargeTimer: 0

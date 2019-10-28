@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Bullet1 : MonoBehaviour
 {
+    public GameObject player;
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Player");
     }
 
     // Update is called once per frame
@@ -18,14 +20,15 @@ public class Bullet1 : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision other) 
+    void OnCollisionEnter2D(Collision2D other) 
     {
         if (other.gameObject.layer == 11)
         {
-            Destroy(other.gameObject);
+            Debug.Log("Drone");
+            other.gameObject.SetActive(false);
+            player.GetComponent<PlayerController>().scoreEarned += 10;
         }
-
-        if(other.gameObject.layer == 13)
+        else if(other.gameObject.layer == 13)
         {
             if (other.gameObject.GetComponent<PlayerController>())
             {
@@ -33,9 +36,8 @@ public class Bullet1 : MonoBehaviour
             }
             else
             {
-                Debug.Log("Critical Error MF");
+                Debug.Log(other.gameObject.name);
             }
         }
-        Destroy(gameObject);
     }
 }
