@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8814213437893636324}
   - component: {fileID: 8814213437893636323}
   - component: {fileID: 8814213437893636322}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 8814213438243931302}
   - component: {fileID: 8814213438243931305}
   - component: {fileID: 8814213438243931304}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Capsule (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 8814213439473232232}
   - component: {fileID: 8814213439473232231}
   - component: {fileID: 8814213439473232230}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8814213439791836169}
   - component: {fileID: 6330364120954464374}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Drone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,10 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shipState: 0
-  yPos: 0
-  xPos: 0
-  yRot1: 0
-  yRot2: 0
+  kamikazeEnabled: 0
   shipSpeed: 0
   radius: 0
   rotationSpeed: 0

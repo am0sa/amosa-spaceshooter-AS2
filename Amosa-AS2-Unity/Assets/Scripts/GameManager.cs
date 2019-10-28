@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     void Start() 
     {
-        SpawnShips();
+        //SpawnShips();
     }
 
     void FixedUpdate()
