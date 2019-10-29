@@ -25,6 +25,7 @@ public class ShipController : MonoBehaviour
     public float rotationSpeed;
     private float chargeTimer;
     private float chargeTrigger;
+    public float KamikazeTimer;
     public Rigidbody2D rigidBody;
 
     public GameObject player;
@@ -91,6 +92,7 @@ public class ShipController : MonoBehaviour
             }
             else
             {
+                Debug.Log("Rotation Test");
                 moveTo = Vector2.MoveTowards(transform.position, player.transform.position, shipSpeed * Time.deltaTime);
                 transform.LookAt(player.transform.position);
                 chargeTimer -= Time.deltaTime;
