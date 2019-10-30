@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 4994754373229587542}
   m_Layer: 11
   m_Name: Drone
-  m_TagString: Untagged
+  m_TagString: Drone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -302,9 +302,28 @@ MonoBehaviour:
   kamikazeEnabled: 0
   shipSpeed: 0
   radius: 0
-  rotationSpeed: 0
+  KamikazeTimer: 0
   rigidBody: {fileID: 0}
   player: {fileID: 0}
+  node:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  entryPattern1: 
+  entryPattern2: 
+  entryPattern3: 
+  entryPattern4: 
+  entryPattern5: 
+  entryPattern6: 
+  nodeTracker: 0
 --- !u!50 &4994754373229587542
 Rigidbody2D:
   serializedVersion: 4

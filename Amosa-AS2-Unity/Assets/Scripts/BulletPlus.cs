@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class BulletPlus : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject player;
+
     void Start()
     {
-        
+        player = GameObject.Find("Player");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (transform.position.x > 15 || transform.position.x < -15 || transform.position.y > 15 || transform.position.y < -15)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other) 
+    {
+        if (other.gameObject.layer == 11)
+        {
+            other.gameObject.SetActive(false);
+            player.GetComponent<PlayerController>().scoreEarned += 20;
+        }
     }
 }
