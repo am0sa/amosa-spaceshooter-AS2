@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
             playCounter++;
         }
         PlayerPrefs.SetInt("playCount", playCounter);
-        hitPoints = 2;
+        hitPoints = 1;
         playerSpeed = 3f;
         cannonChargeTimer = 0f;
         RECHARGE_TIME = 3f;
@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         isFacingRight = animator.GetBool("isFacingRight");
-        Debug.Log(scoreEarned);
     }
 
     void Update() 

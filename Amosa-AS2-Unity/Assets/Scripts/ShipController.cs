@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class ShipController : MonoBehaviour
 {
-    // GameManager - manages active objects, ui, persistent data
-
     public enum ShipState
     {
         ENTRY, //Everything between instantiation and the turning point
@@ -37,6 +35,7 @@ public class ShipController : MonoBehaviour
     public int[] entryPattern5;
     public int[] entryPattern6;
     public int nodeTracker;
+    public int entryIndex;
 
 
     private void Awake()
@@ -64,6 +63,10 @@ public class ShipController : MonoBehaviour
         entryPattern.Add(entryPattern4);
         entryPattern.Add(entryPattern5);
         entryPattern.Add(entryPattern6);
+
+       
+
+        
     }
 
     public void Start()
@@ -77,20 +80,28 @@ public class ShipController : MonoBehaviour
         chargeTrigger = 15.0f;
         nodeTracker = 0;
         timer = 0f;
+        entryIndex = 2;
+        
+        node = new GameObject[11];
+
+        for (int i = 0; i < 11; i++)
+        {
+            node[i] = GameObject.Find("Node" + (i + 1));
+        }
     }
 
     void FixedUpdate() //Update ship positions, next active waypoint, 
     {
+  
         switch (shipState)
         {
             case ShipState.ENTRY:
-                if (Vector3.Distance(transform.position, node[entryPattern1[nodeTracker] - 1].transform.position) >= 0.1f)
+                if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
                 {
-                    MoveShip(node[entryPattern1[nodeTracker] - 1]);
+                    MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
                 }
-                else if (nodeTracker + 1 < entryPattern1.Length)
+                else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
                 {
-                    Debug.Log(nodeTracker);
                     nodeTracker++;
                 }
                 else
@@ -109,12 +120,12 @@ public class ShipController : MonoBehaviour
                 {
                     shipState = ShipState.CHARGE;
                 }
-                
-                if (Vector3.Distance(transform.position, node[entryPattern1[nodeTracker] - 1].transform.position) >= 0.1f)
+
+                if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
                 {
-                    MoveShip(node[entryPattern1[nodeTracker] - 1]);
+                    MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
                 }
-                else if (nodeTracker + 1 < entryPattern1.Length)
+                else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
                 {
                     nodeTracker++;
                 }
@@ -171,16 +182,19 @@ public class ShipController : MonoBehaviour
     public void MoveShip(Vector2 destinationPoint) 
     {
         rigidBody.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)destinationPoint, shipSpeed * Time.deltaTime));
+        transform.LookAt(destinationPoint);
     }
 
     public void MoveShip(Vector3 destinationPoint)
     {
         rigidBody.MovePosition(Vector3.MoveTowards(transform.position, destinationPoint, shipSpeed * Time.deltaTime));
+        transform.LookAt(destinationPoint);
     }
 
     public void MoveShip(GameObject node)
     {
         rigidBody.MovePosition(Vector2.MoveTowards(transform.position, node.transform.position, shipSpeed * Time.deltaTime));
+        transform.LookAt(node.transform.position);
     }
 
     public void Kamikaze()
@@ -190,4 +204,11 @@ public class ShipController : MonoBehaviour
         Destroy(gameObject);      
     }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.gameObject.GetComponent<PlayerController>().hitPoints--;
+        }
+    }
 }

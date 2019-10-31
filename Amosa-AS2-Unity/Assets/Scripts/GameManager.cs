@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject dronePrefab;
+    public GameObject turretPrefab;
     public PlayerController player;
     public Transform defaultFormation;
     public float gameTimer;

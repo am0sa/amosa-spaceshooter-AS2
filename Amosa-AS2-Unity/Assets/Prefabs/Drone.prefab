@@ -324,6 +324,7 @@ MonoBehaviour:
   entryPattern5: 
   entryPattern6: 
   nodeTracker: 0
+  entryIndex: 0
 --- !u!50 &4994754373229587542
 Rigidbody2D:
   serializedVersion: 4
@@ -343,5 +344,5 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4
