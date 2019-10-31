@@ -38,5 +38,7 @@ public class Bullet1 : MonoBehaviour
                 Debug.Log(other.gameObject.name);
             }
         }
+
+        Destroy(gameObject);
     }
 }

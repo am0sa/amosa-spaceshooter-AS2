@@ -6,23 +6,30 @@ public class TurretController : MonoBehaviour
 {
     public enum ShipState
     {
-        ENTRY, //Everything between instantiation and the turning point
-        LINE, //Follow 1st ship of attack line
-        RAGE,  //Use of multiple waypoints
+        ENTRY, //Move through entry waypoints
+        LINE, //Patrol a line
+        LURK,  //Stationary at a point
     }
     public ShipState shipState; 
     private GameManager gameManager;
     public GameObject enemyBulletPrefab;
+    public GameObject hub;
     private Formation formation;
+
     public bool kamikazeEnabled;
 
-    //movement variables
     public float shipSpeed;
-    public float radius;
-    private float timer;
+    public float DEFAULT_SHIP_SPEED;
+    private float lurkTimer;
+    private float DEFAULT_LURK_TIME;
+    public float bulletForce;
+    public float shootTimer;
+    public float SHOOT_RESET;
+
     public Rigidbody2D rigidBody;
     public GameObject player;
     public GameObject[] node;
+
     public List<int[]> entryPattern;
     public int[] entryPattern1;
     public int[] entryPattern2;
@@ -33,7 +40,6 @@ public class TurretController : MonoBehaviour
     public int nodeTracker;
     public int entryIndex;
 
-    public float bulletForce;
 
 
     private void Awake()
@@ -66,7 +72,7 @@ public class TurretController : MonoBehaviour
 
         for (int i = 0; i < 11; i++)
         {
-            node[i] = GameObject.Find("Node" + i);
+            node[i] = GameObject.Find("Node" + (i + 1));
         }
     }
 
@@ -74,23 +80,29 @@ public class TurretController : MonoBehaviour
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = GameObject.Find("Player");
-        shipState = ShipState.ENTRY;
+        shipState = ShipState.LINE;
         rigidBody = GetComponent<Rigidbody2D>();
-        shipSpeed = 1f;
+        DEFAULT_SHIP_SPEED = 0.8f;
+        shipSpeed = DEFAULT_SHIP_SPEED;
         nodeTracker = 0;
-        timer = 0f;
+        DEFAULT_LURK_TIME = 7.0f;
+        lurkTimer = DEFAULT_LURK_TIME;
         entryIndex = 0;
+        SHOOT_RESET = 5.0f/3;
+        shootTimer = SHOOT_RESET;
+        bulletForce = 50f;
     }
 
     void FixedUpdate() //Update ship positions, next active waypoint, 
     {
-  
+        //Debug.Log("Lurking: " + lurkTimer);
         switch (shipState)
         {
             case ShipState.ENTRY:
                 if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
                 {
                     MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
+                    transform.LookAt(node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position);
                 }
                 else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
                 {
@@ -106,19 +118,29 @@ public class TurretController : MonoBehaviour
                 if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
                 {
                     MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
+                    transform.LookAt(player.transform.position);
                 }
                 else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
                 {
+                    lurkTimer = DEFAULT_LURK_TIME;
+                    shipState = ShipState.LURK;
                     nodeTracker++;
                 }
                 else
                 {
+                    lurkTimer = DEFAULT_LURK_TIME;
+                    shipState = ShipState.LURK;
                     nodeTracker--;
                 }
                 break;
 
-            case ShipState.RAGE:
-
+            case ShipState.LURK:
+                transform.LookAt(player.transform.position);
+                lurkTimer -= Time.deltaTime;
+                if (lurkTimer <= 0)
+                {
+                    shipState = ShipState.LINE;
+                }
                 break;
 
             default:
@@ -126,22 +148,42 @@ public class TurretController : MonoBehaviour
         }
     }
 
+    void Update() 
+    {
+        if (shipState == ShipState.LINE)
+        {
+            shipSpeed = DEFAULT_SHIP_SPEED / 2f;
+        }
+        else
+        {
+            shipSpeed = DEFAULT_SHIP_SPEED;
+        }
+
+        if (shipState == ShipState.LINE || shipState == ShipState.LURK)
+        {
+            shootTimer -= Time.deltaTime;
+
+            if (shootTimer <= 0)
+            {
+                Shoot();
+                shootTimer = SHOOT_RESET;
+            }
+        }
+    }
+
     public void MoveShip(Vector2 destinationPoint) 
     {
         rigidBody.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)destinationPoint, shipSpeed * Time.deltaTime));
-        transform.LookAt(destinationPoint);
     }
 
     public void MoveShip(Vector3 destinationPoint)
     {
         rigidBody.MovePosition(Vector3.MoveTowards(transform.position, destinationPoint, shipSpeed * Time.deltaTime));
-        transform.LookAt(destinationPoint);
     }
 
     public void MoveShip(GameObject node)
     {
         rigidBody.MovePosition(Vector2.MoveTowards(transform.position, node.transform.position, shipSpeed * Time.deltaTime));
-        transform.LookAt(node.transform.position);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -154,8 +196,8 @@ public class TurretController : MonoBehaviour
 
     private void Shoot()
     {
-        var temp = Instantiate(enemyBulletPrefab, transform.position + Vector3.forward, transform.rotation);
-        temp.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletForce);
+        var temp = Instantiate(enemyBulletPrefab, transform.position, transform.rotation);
+        temp.GetComponent<Rigidbody2D>().AddForce(((Vector2)player.transform.position - (Vector2)temp.transform.position) * bulletForce);
     }
 
 

@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 8814213438243931305}
   - component: {fileID: 436359101}
   m_Layer: 11
-  m_Name: Capsule (1)
+  m_Name: Nose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 8814213439473232231}
   - component: {fileID: 8814213439473232230}
   m_Layer: 11
-  m_Name: Sphere
+  m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -299,11 +299,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shipState: 0
+  headMesh: {fileID: 8814213439473232235}
   kamikazeEnabled: 0
   shipSpeed: 0
   radius: 0
   KamikazeTimer: 0
+  bulletForce: 0
+  shootTimer: 0
+  SHOOT_RESET: 0
   rigidBody: {fileID: 0}
+  enemyBulletPrefab: {fileID: 6389848966578153330, guid: 51ebc57eac554439a8e2a8cb9aa8ec3b,
+    type: 3}
   player: {fileID: 0}
   node:
   - {fileID: 0}

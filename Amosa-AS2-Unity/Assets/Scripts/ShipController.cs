@@ -15,8 +15,16 @@ public class ShipController : MonoBehaviour
     public ShipState shipState; 
     private GameManager gameManager;
     private Formation formation;
+    [SerializeField] private GameObject headMesh;
     public bool kamikazeEnabled;
 
+    private bool sidePass;
+    private bool heightPass;
+    private float initialSide;
+    private float initialHeight;
+
+    public int hitPoints { get; set; }
+ 
     //movement variables
     public float shipSpeed;
     public float radius;
@@ -24,7 +32,13 @@ public class ShipController : MonoBehaviour
     private float chargeDuration;
     private float chargeTrigger;
     public float KamikazeTimer;
+    public float bulletForce;
+    public float shootTimer;
+    public float SHOOT_RESET;
+
     public Rigidbody2D rigidBody;
+    public GameObject enemyBulletPrefab;
+
     public GameObject player;
     public GameObject[] node;
     public List<int[]> entryPattern;
@@ -47,6 +61,7 @@ public class ShipController : MonoBehaviour
         else
         {
             kamikazeEnabled = true;
+            hitPoints = 2;
         }
 
         entryPattern1 = new int[] { 10, 7, 9, 11, 10 };
@@ -64,8 +79,12 @@ public class ShipController : MonoBehaviour
         entryPattern.Add(entryPattern5);
         entryPattern.Add(entryPattern6);
 
-       
+        node = new GameObject[11];
 
+        for (int i = 0; i < 11; i++)
+        {
+            node[i] = GameObject.Find("Node" + (i + 1));
+        }
         
     }
 
@@ -81,13 +100,13 @@ public class ShipController : MonoBehaviour
         nodeTracker = 0;
         timer = 0f;
         entryIndex = 2;
-        
-        node = new GameObject[11];
+        bulletForce = 40f;
+        initialHeight = transform.position.y - player.transform.position.y;
+        initialSide = transform.position.x - player.transform.position.x;
 
-        for (int i = 0; i < 11; i++)
-        {
-            node[i] = GameObject.Find("Node" + (i + 1));
-        }
+        SHOOT_RESET = 5.0f;
+        shootTimer = SHOOT_RESET;
+        bulletForce = 50f;
     }
 
     void FixedUpdate() //Update ship positions, next active waypoint, 
@@ -140,11 +159,41 @@ public class ShipController : MonoBehaviour
                 break;
 
             case ShipState.RAGE:
-
+                transform.LookAt(player.transform.position);
+                headMesh.GetComponent<MeshRenderer>().material.color = Color.red;
                 break;
 
             default:
                 break;
+        }
+    }
+
+    private void Update()
+    {
+        var currSide = transform.position.x - player.transform.position.x;
+        var currHeight = transform.position.y - player.transform.position.y;
+
+        if (sidePass || heightPass)
+        {
+            shipState = ShipState.RAGE;
+        }
+
+        if (initialSide * currSide < 0)
+        {
+            sidePass = true;
+        }
+
+        if (initialHeight * currHeight < 0)
+        {
+            heightPass = true;
+        }
+
+        shootTimer -= Time.deltaTime;
+
+        if (shootTimer <= 0 && shipState == ShipState.RAGE)
+        {
+            Shoot();
+            shootTimer = SHOOT_RESET;
         }
     }
 
@@ -210,5 +259,11 @@ public class ShipController : MonoBehaviour
         {
             other.gameObject.GetComponent<PlayerController>().hitPoints--;
         }
+    }
+
+    private void Shoot()
+    {
+        var temp = Instantiate(enemyBulletPrefab, transform.position, transform.rotation);
+        temp.GetComponent<Rigidbody2D>().AddForce(((Vector2)player.transform.position - (Vector2)temp.transform.position) * bulletForce);
     }
 }
