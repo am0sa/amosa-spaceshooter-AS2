@@ -55,8 +55,6 @@ public class GameManager : MonoBehaviour
             if (player.hitPoints <= 0)
             {
                 player.gameObject.SetActive(false);
-                gameTimer = 0;
-                ClearAll();
                 PauseGame();
             }
 
@@ -150,6 +148,10 @@ public class GameManager : MonoBehaviour
 
     public void ClearAll()
     {
+        player.gameObject.SetActive(true);
+        player.GetComponent<PlayerController>().hitPoints = 10;
+        gameTimer = 0;
+
         foreach (Transform child in enemyContainer.transform)
         {
             Destroy(child.gameObject);
@@ -166,7 +168,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         menuOverlay.SetActive(false);
         return false;
-
     }
 
     public bool PauseGame()
