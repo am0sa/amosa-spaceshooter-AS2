@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float playerSpeed;
     [SerializeField] private float bulletOffset;
+    public AudioSource pew;
 
     public int hitPoints { get; set; }
 
@@ -238,7 +239,7 @@ public class PlayerController : MonoBehaviour
                 break;
             
         }
-        
+        pew.Play();
     }
 
 
