@@ -103,7 +103,7 @@ public class ShipController : MonoBehaviour
         initialHeight = transform.position.y - player.transform.position.y;
         initialSide = transform.position.x - player.transform.position.x;
 
-        SHOOT_RESET = 2.0f;
+        SHOOT_RESET = 3.0f;
         shootTimer = SHOOT_RESET;
         bulletForce = 60f;
 
@@ -120,102 +120,107 @@ public class ShipController : MonoBehaviour
 
     void FixedUpdate() //Update ship positions, next active waypoint, 
     {
-  
-        if (transform.position.x > 15 || transform.position.x < -15 || transform.position.y > 15 || transform.position.y < -15)
+        if (!gameManager.isGamePaused)
         {
-            Destroy(gameObject);
-        }
+            GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+            if (transform.position.x > 15 || transform.position.x < -15 || transform.position.y > 15 || transform.position.y < -15)
+            {
+                Destroy(gameObject);
+            }
 
-        switch (shipState)
-        {
-            case ShipState.ENTRY:
-                if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
-                {
-                    MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
-                }
-                else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
-                {
-                    nodeTracker++;
-                }
-                else
-                {
-                    shipState = ShipState.LINE;
-                    timer = chargeTrigger;
-                }
-                break;
+            switch (shipState)
+            {
+                case ShipState.ENTRY:
+                    if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
+                    {
+                        MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
+                    }
+                    else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
+                    {
+                        nodeTracker++;
+                    }
+                    else
+                    {
+                        shipState = ShipState.LINE;
+                        timer = chargeTrigger;
+                    }
+                    break;
 
-            case ShipState.LINE:
-                if (timer >= 0)
-                {
-                    timer -= Time.deltaTime;
-                }
-                else
-                {
-                    shipState = ShipState.CHARGE;
-                }
+                case ShipState.LINE:
+                    if (timer >= 0)
+                    {
+                        timer -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        shipState = ShipState.CHARGE;
+                    }
 
-                if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
-                {
-                    MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
-                }
-                else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
-                {
-                    nodeTracker++;
-                }
-                else
-                {
-                    nodeTracker--;
-                }
-                break;
+                    if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
+                    {
+                        MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
+                    }
+                    else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
+                    {
+                        nodeTracker++;
+                    }
+                    else
+                    {
+                        nodeTracker--;
+                    }
+                    break;
 
-            case ShipState.CHARGE:
-                Charge(player);
-                break;
+                case ShipState.CHARGE:
+                    Charge(player);
+                    break;
 
-            case ShipState.RAGE:
-                transform.LookAt(player.transform.position);
-                headMesh.GetComponent<MeshRenderer>().material.color = Color.red;
-                break;
+                case ShipState.RAGE:
+                    transform.LookAt(player.transform.position);
+                    headMesh.GetComponent<MeshRenderer>().material.color = Color.red;
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
     }
 
     private void Update()
     {
-
         if (hitPoints <= 0)
         {
             Destroy(gameObject);
         }
-
-        if (!kamikazeEnabled && (shipState == ShipState.LINE || shipState == ShipState.CHARGE || shipState == ShipState.RAGE))
+        
+        if (!gameManager.isGamePaused)
         {
-            var currSide = transform.position.x - player.transform.position.x;
-            var currHeight = transform.position.y - player.transform.position.y;
-
-            if (sidePass || heightPass)
+            if (!kamikazeEnabled && (shipState == ShipState.LINE || shipState == ShipState.CHARGE || shipState == ShipState.RAGE))
             {
-                shipState = ShipState.RAGE;
-            }
+                var currSide = transform.position.x - player.transform.position.x;
+                var currHeight = transform.position.y - player.transform.position.y;
 
-            if (initialSide * currSide < 0)
-            {
-                sidePass = true;
-            }
+                if (sidePass || heightPass)
+                {
+                    shipState = ShipState.RAGE;
+                }
 
-            if (initialHeight * currHeight < 0)
-            {
-                heightPass = true;
-            }
+                if (initialSide * currSide < 0)
+                {
+                    sidePass = true;
+                }
 
-            shootTimer -= Time.deltaTime;
+                if (initialHeight * currHeight < 0)
+                {
+                    heightPass = true;
+                }
 
-            if (shootTimer <= 0 && (shipState == ShipState.RAGE || shipState == ShipState.CHARGE || shipState == ShipState.LINE))
-            {
-                Shoot();
-                shootTimer = SHOOT_RESET;
+                shootTimer -= Time.deltaTime;
+
+                if (shootTimer <= 0 && (shipState == ShipState.RAGE || shipState == ShipState.CHARGE || shipState == ShipState.LINE))
+                {
+                    Shoot();
+                    shootTimer = SHOOT_RESET;
+                }
             }
         }
     }

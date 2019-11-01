@@ -79,91 +79,98 @@ public class TurretController : MonoBehaviour
         DEFAULT_LURK_TIME = 7.0f;
         lurkTimer = DEFAULT_LURK_TIME;
         entryIndex = 0;
-        SHOOT_RESET = 5.0f/7;
+        SHOOT_RESET = 3.5f;
         shootTimer = SHOOT_RESET;
         bulletForce = 80f;
     }
 
     void FixedUpdate() //Update ship positions, next active waypoint, 
     {
-        //Debug.Log("Lurking: " + lurkTimer);
-        switch (shipState)
+        if (!gameManager.isGamePaused)
         {
-            case ShipState.ENTRY:
-                if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
-                {
-                    MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
-                    transform.LookAt(node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position);
-                }
-                else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
-                {
-                    nodeTracker++;
-                }
-                else
-                {
-                    shipState = ShipState.LINE;
-                }
-                break;
+            switch (shipState)
+            {
+                case ShipState.ENTRY:
+                    if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
+                    {
+                        MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
+                        transform.LookAt(node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position);
+                    }
+                    else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
+                    {
+                        nodeTracker++;
+                    }
+                    else
+                    {
+                        shipState = ShipState.LINE;
+                    }
+                    break;
 
-            case ShipState.LINE:
-                if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
-                {
+                case ShipState.LINE:
+                    if (Vector3.Distance(transform.position, node[(entryPattern[entryIndex])[nodeTracker] - 1].transform.position) >= 0.1f)
+                    {
+                        MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
+                        transform.LookAt(player.transform.position);
+                    }
+                    else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
+                    {
+                        lurkTimer = DEFAULT_LURK_TIME;
+                        shipState = ShipState.LURK;
+                        nodeTracker++;
+                    }
+                    else
+                    {
+                        lurkTimer = DEFAULT_LURK_TIME;
+                        shipState = ShipState.LURK;
+                        nodeTracker--;
+                    }
+                    break;
+
+                case ShipState.LURK:
                     MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
                     transform.LookAt(player.transform.position);
-                }
-                else if (nodeTracker + 1 < entryPattern[entryIndex].Length)
-                {
-                    lurkTimer = DEFAULT_LURK_TIME;
-                    shipState = ShipState.LURK;
-                    nodeTracker++;
-                }
-                else
-                {
-                    lurkTimer = DEFAULT_LURK_TIME;
-                    shipState = ShipState.LURK;
-                    nodeTracker--;
-                }
-                break;
+                    lurkTimer -= Time.deltaTime;
+                    if (lurkTimer <= 0)
+                    {
+                        shipState = ShipState.LINE;
+                    }
+                    break;
 
-            case ShipState.LURK:
-                MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
-                transform.LookAt(player.transform.position);
-                lurkTimer -= Time.deltaTime;
-                if (lurkTimer <= 0)
-                {
-                    shipState = ShipState.LINE;
-                }
-                break;
+                default:
+                    break;
+            }
 
-            default:
-                break;
         }
+
     }
 
     void Update() 
     {
-        if (hitPoints <= 0)
+        if (!gameManager.isGamePaused)
         {
-            Destroy(gameObject);
-        }
-        
-        if (shipState == ShipState.LINE)
-        {
-            shipSpeed = DEFAULT_SHIP_SPEED / 2f;
-        }
-        else
-        {
-            shipSpeed = DEFAULT_SHIP_SPEED;
-        }
-
-        if (shipState == ShipState.LINE || shipState == ShipState.LURK)
-        {
-            shootTimer -= Time.deltaTime;
-
-            if (shootTimer <= 0)
+            if (hitPoints <= 0)
             {
-                Shoot();
-                shootTimer = SHOOT_RESET;
+                Destroy(gameObject);
+            }
+            
+            if (shipState == ShipState.LINE)
+            {
+                shipSpeed = DEFAULT_SHIP_SPEED / 2f;
+            }
+            else
+            {
+                shipSpeed = DEFAULT_SHIP_SPEED;
+            }
+
+            if (shipState == ShipState.LINE || shipState == ShipState.LURK)
+            {
+                shootTimer -= Time.deltaTime;
+
+                if (shootTimer <= 0)
+                {
+                    Shoot();
+                    shootTimer = SHOOT_RESET;
+                }
             }
         }
     }

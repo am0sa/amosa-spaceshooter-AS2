@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject dronePrefab;
     public GameObject turretPrefab;
     public GameObject enemyContainer;
+    public GameObject menuOverlay;
     public PlayerController player;
     public float gameTimer;
     public Vector3[] corners;
@@ -27,74 +28,140 @@ public class GameManager : MonoBehaviour
         corners[3] = new Vector3(-3, -2, 0);
 
         eventTracker = 0;
-        eventOccurence = new bool[4];
-        invokeEventCounter = new int[4];
+        eventOccurence = new bool[5];
 
         for (int i = 0; i < eventOccurence.Length; i++)
         {
             eventOccurence[i] = false;
-            invokeEventCounter[i] = 0;
         }
     }
 
     void Update()
     {
-        gameTimer += Time.deltaTime;
-
-        if (player.hitPoints <= 0)
+        if (Input.GetKeyDown(KeyCode.Escape) && isGamePaused)
         {
-            player.gameObject.SetActive(false);
+            UnpauseGame();
+            Debug.Log("Paused: " + isGamePaused);
         }
 
-        if (gameTimer >= 3 && (int)gameTimer%1 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[0])
+        if (!isGamePaused)
         {
-            SpawnDrone(1);
-            SpawnDrone(2, 2);
+            gameTimer += Time.deltaTime;
 
-            if (gameTimer >= 33)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                eventOccurence[0] = true;
+                PauseGame();
             }
-        }
-        
-        if (gameTimer > 13 && (int)gameTimer%3 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[1])
-        {
-            SpawnDrone(3);
-            SpawnTurret(4, 5);
 
-            if (gameTimer >= 60)
+            if (player.hitPoints <= 0)
             {
-                SpawnTurret(4, 12);
-                SpawnBossDrone(3);
-                eventOccurence[1] = true;
+                player.gameObject.SetActive(false);
             }
-        }
 
-        if (gameTimer > 63 && (int)gameTimer%6 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[2])
-        {
-            SpawnTurret(2, 7);
-
-            if (gameTimer >= 88)
+            if (gameTimer >= 3 && (int)gameTimer%1 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[0])
             {
-                SpawnTurret(3, 12);
-                SpawnBossDrone(1);
-                eventOccurence[2] = true;
+                SpawnDrone(1);
+                SpawnDrone(2, 2);
+
+                if (gameTimer >= 33)
+                {
+                    eventOccurence[0] = true;
+                }
             }
-        }
-
-        if (gameTimer > 95 && (int)gameTimer%2 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[2])
-        {
-            SpawnTurret(2, 15);
-            SpawnDrone(4, 4);
-
-            if (gameTimer >= 100)
+            
+            if (gameTimer > 13 && (int)gameTimer%3 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[1])
             {
-                SpawnTurret(3, 12);
-                SpawnBossDrone(1, 2.5f, 125);
-                eventOccurence[2] = true;
+                SpawnDrone(3);
+                SpawnTurret(4, 5);
+
+                if (gameTimer >= 60)
+                {
+                    SpawnTurret(4, 12);
+                    SpawnBossDrone(3);
+                    eventOccurence[1] = true;
+                }
             }
+
+            if (gameTimer > 63 && (int)gameTimer%6 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[2])
+            {
+                SpawnTurret(2, 7);
+
+                if (gameTimer >= 88)
+                {
+                    SpawnTurret(3, 12);
+                    SpawnBossDrone(1);
+                    eventOccurence[2] = true;
+                }
+            }
+
+            if (gameTimer > 95 && (int)gameTimer%2 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[2])
+            {
+                SpawnTurret(2, 15);
+                SpawnDrone(4, 4);
+
+                if (gameTimer >= 100)
+                {
+                    SpawnTurret(3, 12);
+                    SpawnBossDrone(1, 2.5f, 125);
+                    eventOccurence[2] = true;
+                }
+            }
+
+            if (gameTimer > 125 && (int)gameTimer%2 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[3])
+            {
+                SpawnTurret(2, 15);
+                SpawnDrone(4, 4);
+                SpawnDrone(3, 4);
+                SpawnDrone(2, 4);
+                SpawnDrone(1, 4);
+
+                if (gameTimer >= 128 && !eventOccurence[4])
+                {
+                    SpawnBossDrone(1, 3, 85);
+                    eventOccurence[4] = true;
+                }
+
+                if (gameTimer >= 135)
+                {
+                    SpawnTurret(3, 12);
+                    SpawnBossTurret(1, 2.5f, 85);
+                    eventOccurence[3] = true;
+                }
+            }
+
+            if (gameTimer >= 140)
+            {
+                if (enemyContainer)
+                {
+                    
+                }
+            }
+
         }
 
+
+    }
+
+    public void UnpauseGame()
+    {
+        if (isGamePaused)
+        {
+            
+            Time.timeScale = 1;
+            Debug.Log("TimeScale " + Time.timeScale);
+            isGamePaused = !isGamePaused;
+            menuOverlay.SetActive(false);
+        }
+    }
+
+    public void PauseGame()
+    {
+        if (!isGamePaused)
+        {
+            Time.timeScale = 0;
+            isGamePaused = true;
+            menuOverlay.SetActive(true);
+        }
     }
 
     public void SpawnDrone(int locator, int hitPoints = 1)

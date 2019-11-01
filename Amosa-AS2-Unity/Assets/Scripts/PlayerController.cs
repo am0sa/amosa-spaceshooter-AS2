@@ -71,94 +71,97 @@ public class PlayerController : MonoBehaviour
 
     void Update() 
     {
-        if (hitPoints <= 0)
+        if (!gameManager.isGamePaused)
         {
-            gameManager.isGamePaused = true;
-        }
-
-        if (isFacingRight)
-        {
-            forward = Vector3.right;
-        }
-        else
-        {
-            forward = Vector3.left;
-        }
-
-        if (blinkIsCharging)
-        {
-            blinkRecharge -= Time.deltaTime;
-
-            if(blinkRecharge <= 0)
+            if (hitPoints <= 0)
             {
-                blinkIsCharging = false;
-            } 
-        }
+                gameManager.isGamePaused = true;
+            }
 
-        var movementDir = new Vector2(0, 0);
+            if (isFacingRight)
+            {
+                forward = Vector3.right;
+            }
+            else
+            {
+                forward = Vector3.left;
+            }
 
-        if (Input.GetAxis("Horizontal") > 0)
-        {
-            animator.SetBool("isFacingRight", true);
-            movementDir += Vector2.right;
-            forwardHolder.rotation = new Quaternion(0, 0, 0, 0);
-        }
-        else if(Input.GetAxis("Horizontal") < 0)
-        {
-            animator.SetBool("isFacingRight", false);
-            movementDir += Vector2.left;
-            forwardHolder.rotation = new Quaternion(0, 180, 0, 0);
-        }
+            if (blinkIsCharging)
+            {
+                blinkRecharge -= Time.deltaTime;
 
-        if (Input.GetAxis("Vertical") > 0)
-        {
-            animator.SetBool("isFalling", false);
-            animator.SetBool("isRising", true);
-            movementDir += Vector2.up;
-        }
-        else if (Input.GetAxis("Vertical") < 0)
-        {
-            animator.SetBool("isRising", false);
-            animator.SetBool("isFalling", true);
-            movementDir += Vector2.down;
-        }
-        else
-        {
-            animator.SetBool("isRising", false);
-            animator.SetBool("isFalling", false);
-            //no change to movementDir
-        }
+                if (blinkRecharge <= 0)
+                {
+                    blinkIsCharging = false;
+                }
+            }
 
-        if (Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.C))
-        {
-            Shoot();
-        }
-        else
-        {
-            rapidFireDelay = 0;
-        }
+            var movementDir = new Vector2(0, 0);
 
-        if (Input.GetKeyDown(KeyCode.RightShift) && !blinkIsCharging)
-        {
-            blinkIsCharging = Blink(movementDir);
-            blinkRecharge = RECHARGE_TIME;
+            if (Input.GetAxis("Horizontal") > 0)
+            {
+                animator.SetBool("isFacingRight", true);
+                movementDir += Vector2.right;
+                forwardHolder.rotation = new Quaternion(0, 0, 0, 0);
+            }
+            else if (Input.GetAxis("Horizontal") < 0)
+            {
+                animator.SetBool("isFacingRight", false);
+                movementDir += Vector2.left;
+                forwardHolder.rotation = new Quaternion(0, 180, 0, 0);
+            }
+
+            if (Input.GetAxis("Vertical") > 0)
+            {
+                animator.SetBool("isFalling", false);
+                animator.SetBool("isRising", true);
+                movementDir += Vector2.up;
+            }
+            else if (Input.GetAxis("Vertical") < 0)
+            {
+                animator.SetBool("isRising", false);
+                animator.SetBool("isFalling", true);
+                movementDir += Vector2.down;
+            }
+            else
+            {
+                animator.SetBool("isRising", false);
+                animator.SetBool("isFalling", false);
+                //no change to movementDir
+            }
+
+            if (Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.C))
+            {
+                Shoot();
+            }
+            else
+            {
+                rapidFireDelay = 0;
+            }
+
+            if (Input.GetKeyDown(KeyCode.RightShift) && !blinkIsCharging)
+            {
+                blinkIsCharging = Blink(movementDir);
+                blinkRecharge = RECHARGE_TIME;
+            }
+
+            if (Input.GetKeyUp(KeyCode.C) && !Input.GetKey(KeyCode.Space))
+            {
+                int pow = (int)(cannonChargeTimer * 2.5);
+                Shoot(pow);
+                cannonChargeTimer = 0;
+            }
+
+            if (Input.GetKey(KeyCode.C) && !Input.GetKey(KeyCode.Space))
+            {
+                cannonChargeTimer += Time.deltaTime;
+            }
+
+
+            movementDir = (movementDir.normalized * playerSpeed * Time.deltaTime);
+            transform.position += (Vector3)movementDir;
         }
-
-        if (Input.GetKeyUp(KeyCode.C) && !Input.GetKey(KeyCode.Space))
-        {
-            int pow = (int)(cannonChargeTimer * 2.5);
-            Shoot(pow);
-            cannonChargeTimer = 0;
-        }
-
-        if (Input.GetKey(KeyCode.C) && !Input.GetKey(KeyCode.Space))
-        {
-            cannonChargeTimer += Time.deltaTime;
-        }
-
-
-        movementDir = (movementDir.normalized * playerSpeed * Time.deltaTime);
-        transform.position += (Vector3)movementDir;
     }
 
     public bool Blink(Vector2 movementDir)
