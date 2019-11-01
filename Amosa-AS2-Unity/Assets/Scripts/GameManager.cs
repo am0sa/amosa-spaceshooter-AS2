@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public bool isGamePaused;
     public bool[] eventOccurence;
     public int eventTracker;
+    public int[] invokeEventCounter;
 
     void Start() 
     {
@@ -26,9 +27,12 @@ public class GameManager : MonoBehaviour
 
         eventTracker = 0;
         eventOccurence = new bool[4];
+        invokeEventCounter = new int[4];
+
         for (int i = 0; i < eventOccurence.Length; i++)
         {
             eventOccurence[i] = false;
+            invokeEventCounter[i] = 0;
         }
     }
 
@@ -41,13 +45,14 @@ public class GameManager : MonoBehaviour
             player.gameObject.SetActive(false);
         }
 
-        if (gameTimer >= 3 && !eventOccurence[0])
+        if (gameTimer >= 3 && (int)gameTimer%3 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[0])
         {
-            for (int i = 0; i < 3; i++)
+            SpawnDrone(1);
+
+            if (gameTimer >= 33)
             {
-                SpawnDrone(1 + i,3);
+                eventOccurence[0] = true;
             }
-            eventOccurence[0] = true;
         }
     }
 
@@ -66,6 +71,7 @@ public class GameManager : MonoBehaviour
         {
             entryPattern = Random.Range(3, 6);
         }
+
         switch (locator)
         {
             case 1:
@@ -93,5 +99,49 @@ public class GameManager : MonoBehaviour
         tempC.hitPoints = hitPoints;
         tempC.kamikazeEnabled = kamikazeOn;
         tempC.shipState = ShipController.ShipState.ENTRY;
+    }
+
+
+    public void SpawnTurret(int locator, int hitPoints = 1)
+    {
+        GameObject temp;
+        int entryPattern;
+
+        bool kamikazeOn = hitPoints > 1 ? false: true;
+
+        if (locator < 4)
+        {
+            entryPattern = Random.Range(0, 3);
+        }
+        else
+        {
+            entryPattern = Random.Range(3, 6);
+        }
+        switch (locator)
+        {
+            case 1:
+                temp = Instantiate(turretPrefab, corners[locator - 1], dronePrefab.transform.rotation);
+                break;
+
+            case 2:
+                temp = Instantiate(turretPrefab, corners[locator - 1], dronePrefab.transform.rotation);
+                break;
+
+            case 3:
+                temp = Instantiate(turretPrefab, corners[locator - 1], dronePrefab.transform.rotation);
+                break;
+
+            case 4:
+                temp = Instantiate(turretPrefab, corners[locator - 1], dronePrefab.transform.rotation);
+                break;
+
+            default:
+                temp = Instantiate(turretPrefab, corners[locator - 1], dronePrefab.transform.rotation);
+                break;
+        }
+
+        var tempC = temp.GetComponent<TurretController>();
+        tempC.hitPoints = hitPoints;
+        tempC.shipState = TurretController.ShipState.ENTRY;
     }
 }
