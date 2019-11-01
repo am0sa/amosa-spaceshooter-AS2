@@ -25,14 +25,14 @@ public class BulletPlus : MonoBehaviour
         {
             if (other.gameObject.tag == "Drone")
             {
-                other.transform.parent.GetComponent<ShipController>().hitPoints -= 3;
+                other.transform.parent.GetComponent<ShipController>().hitPoints -= 8;
                 player.GetComponent<PlayerController>().scoreEarned += 20;
             }
             
 
             if (other.gameObject.tag == "Turret")
             {
-                other.transform.parent.GetComponent<TurretController>().hitPoints--;
+                other.transform.parent.GetComponent<TurretController>().hitPoints-= 5;
                 player.GetComponent<PlayerController>().scoreEarned += 50;
             }
         }

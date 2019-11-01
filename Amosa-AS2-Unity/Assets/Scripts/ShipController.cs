@@ -93,19 +93,19 @@ public class ShipController : MonoBehaviour
         player = GameObject.Find("Player");
         shipState = ShipState.ENTRY;
         rigidBody = GetComponent<Rigidbody2D>();
-        shipSpeed = 1f;
+        shipSpeed = 0.8f;
         chargeDuration = 12.5f;
         chargeTrigger = 15.0f;
         nodeTracker = 0;
         timer = 0f;
         
-        bulletForce = 40f;
+        bulletForce = 15f;
         initialHeight = transform.position.y - player.transform.position.y;
         initialSide = transform.position.x - player.transform.position.x;
 
-        SHOOT_RESET = 5.0f;
+        SHOOT_RESET = 2.0f;
         shootTimer = SHOOT_RESET;
-        bulletForce = 50f;
+        bulletForce = 60f;
 
         if (hitPoints == 0)
         {
@@ -121,6 +121,11 @@ public class ShipController : MonoBehaviour
     void FixedUpdate() //Update ship positions, next active waypoint, 
     {
   
+        if (transform.position.x > 15 || transform.position.x < -15 || transform.position.y > 15 || transform.position.y < -15)
+        {
+            Destroy(gameObject);
+        }
+
         switch (shipState)
         {
             case ShipState.ENTRY:
@@ -207,7 +212,7 @@ public class ShipController : MonoBehaviour
 
             shootTimer -= Time.deltaTime;
 
-            if (shootTimer <= 0 && shipState == ShipState.RAGE)
+            if (shootTimer <= 0 && (shipState == ShipState.RAGE || shipState == ShipState.CHARGE || shipState == ShipState.LINE))
             {
                 Shoot();
                 shootTimer = SHOOT_RESET;
@@ -285,6 +290,6 @@ public class ShipController : MonoBehaviour
     private void Shoot()
     {
         var temp = Instantiate(enemyBulletPrefab, transform.position, transform.rotation);
-        temp.GetComponent<Rigidbody2D>().AddForce(((Vector2)player.transform.position - (Vector2)temp.transform.position) * bulletForce);
+        temp.GetComponent<Rigidbody2D>().AddForce(((Vector2)player.transform.position - (Vector2)temp.transform.position).normalized * bulletForce);
     }
 }

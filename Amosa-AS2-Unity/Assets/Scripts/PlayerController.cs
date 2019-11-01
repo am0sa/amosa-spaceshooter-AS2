@@ -55,8 +55,8 @@ public class PlayerController : MonoBehaviour
             playCounter++;
         }
         PlayerPrefs.SetInt("playCount", playCounter);
-        hitPoints = 1;
-        playerSpeed = 3f;
+        hitPoints = 10;
+        playerSpeed = 2f;
         cannonChargeTimer = 0f;
         RECHARGE_TIME = 3f;
         bulletForce = 1.75f;
@@ -163,7 +163,7 @@ public class PlayerController : MonoBehaviour
 
     public bool Blink(Vector2 movementDir)
     {
-        Vector2 destination = ((Vector2)transform.position + playerSpeed * playerSpeed * movementDir);
+        Vector2 destination = ((Vector2)transform.position + playerSpeed * movementDir * 0.3f);
         if ((Vector2)transform.position == destination)
         {
             return false;
@@ -220,19 +220,19 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case PowerLevel.two:
-                temp = Instantiate(bullet2, forwardHolder);
+                temp = Instantiate(bullet2, transform.position, forwardHolder.transform.rotation);
                 temp.GetComponent<Rigidbody2D>().AddForce(forward * bulletForce * 200);
                 temp.transform.SetParent(GameObject.Find("Independent").transform);
                 break;
 
             case PowerLevel.three:
-                temp = Instantiate(bullet3, forwardHolder);
+                temp = Instantiate(bullet3, transform.position, forwardHolder.transform.rotation);
                 temp.GetComponent<Rigidbody2D>().AddForce(forward * bulletForce * 200);
                 temp.transform.SetParent(GameObject.Find("Independent").transform);
                 break;
 
             case PowerLevel.super:
-                temp = Instantiate(bulletSuper, forwardHolder);
+                temp = Instantiate(bulletSuper, transform.position, forwardHolder.transform.rotation);
                 temp.GetComponent<Rigidbody2D>().AddForce(forward * bulletForce * 200);
                 temp.transform.SetParent(GameObject.Find("Independent").transform);
                 break;

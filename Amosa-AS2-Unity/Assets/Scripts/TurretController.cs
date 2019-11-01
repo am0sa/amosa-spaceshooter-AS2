@@ -79,9 +79,9 @@ public class TurretController : MonoBehaviour
         DEFAULT_LURK_TIME = 7.0f;
         lurkTimer = DEFAULT_LURK_TIME;
         entryIndex = 0;
-        SHOOT_RESET = 5.0f/3;
+        SHOOT_RESET = 5.0f/7;
         shootTimer = SHOOT_RESET;
-        bulletForce = 50f;
+        bulletForce = 80f;
     }
 
     void FixedUpdate() //Update ship positions, next active waypoint, 
@@ -126,6 +126,7 @@ public class TurretController : MonoBehaviour
                 break;
 
             case ShipState.LURK:
+                MoveShip(node[(entryPattern[entryIndex])[nodeTracker] - 1]);
                 transform.LookAt(player.transform.position);
                 lurkTimer -= Time.deltaTime;
                 if (lurkTimer <= 0)
@@ -193,7 +194,7 @@ public class TurretController : MonoBehaviour
     private void Shoot()
     {
         var temp = Instantiate(enemyBulletPrefab, transform.position, transform.rotation);
-        temp.GetComponent<Rigidbody2D>().AddForce(((Vector2)player.transform.position - (Vector2)temp.transform.position) * bulletForce);
+        temp.GetComponent<Rigidbody2D>().AddForce(((Vector2)player.transform.position - (Vector2)temp.transform.position).normalized * bulletForce);
     }
 
 
