@@ -168,6 +168,7 @@ MonoBehaviour:
   player: {fileID: 0}
   defaultFormation: {fileID: 0}
   gameTimer: 0
+  corners: []
 --- !u!1 &274406015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1657,12 +1658,12 @@ PrefabInstance:
     - target: {fileID: 8814213439791836169, guid: 3b5960c53d30b4556bf8ca49827c7985,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3.26
       objectReference: {fileID: 0}
     - target: {fileID: 8814213439791836169, guid: 3b5960c53d30b4556bf8ca49827c7985,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.07
       objectReference: {fileID: 0}
     - target: {fileID: 8814213439791836169, guid: 3b5960c53d30b4556bf8ca49827c7985,
         type: 3}
@@ -1708,6 +1709,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6330364120954464374, guid: 3b5960c53d30b4556bf8ca49827c7985,
+        type: 3}
+      propertyPath: shipState
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b5960c53d30b4556bf8ca49827c7985, type: 3}

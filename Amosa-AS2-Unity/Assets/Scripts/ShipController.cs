@@ -23,7 +23,7 @@ public class ShipController : MonoBehaviour
     private float initialSide;
     private float initialHeight;
 
-    public int hitPoints { get; set; }
+    public int hitPoints;// { get; set; }
  
     //movement variables
     public float shipSpeed;
@@ -61,7 +61,6 @@ public class ShipController : MonoBehaviour
         else
         {
             kamikazeEnabled = true;
-            hitPoints = 2;
         }
 
         entryPattern1 = new int[] { 10, 7, 9, 11, 10 };
@@ -99,7 +98,7 @@ public class ShipController : MonoBehaviour
         chargeTrigger = 15.0f;
         nodeTracker = 0;
         timer = 0f;
-        entryIndex = 2;
+        
         bulletForce = 40f;
         initialHeight = transform.position.y - player.transform.position.y;
         initialSide = transform.position.x - player.transform.position.x;
@@ -107,6 +106,16 @@ public class ShipController : MonoBehaviour
         SHOOT_RESET = 5.0f;
         shootTimer = SHOOT_RESET;
         bulletForce = 50f;
+
+        if (hitPoints == 0)
+        {
+            hitPoints = 1;
+        }
+
+        if (entryIndex > 5 || entryIndex < 0)
+        {
+            entryIndex = 1;
+        }
     }
 
     void FixedUpdate() //Update ship positions, next active waypoint, 
@@ -170,30 +179,39 @@ public class ShipController : MonoBehaviour
 
     private void Update()
     {
-        var currSide = transform.position.x - player.transform.position.x;
-        var currHeight = transform.position.y - player.transform.position.y;
 
-        if (sidePass || heightPass)
+        if (hitPoints <= 0)
         {
-            shipState = ShipState.RAGE;
+            Destroy(gameObject);
         }
 
-        if (initialSide * currSide < 0)
+        if (!kamikazeEnabled && (shipState == ShipState.LINE || shipState == ShipState.CHARGE || shipState == ShipState.RAGE))
         {
-            sidePass = true;
-        }
+            var currSide = transform.position.x - player.transform.position.x;
+            var currHeight = transform.position.y - player.transform.position.y;
 
-        if (initialHeight * currHeight < 0)
-        {
-            heightPass = true;
-        }
+            if (sidePass || heightPass)
+            {
+                shipState = ShipState.RAGE;
+            }
 
-        shootTimer -= Time.deltaTime;
+            if (initialSide * currSide < 0)
+            {
+                sidePass = true;
+            }
 
-        if (shootTimer <= 0 && shipState == ShipState.RAGE)
-        {
-            Shoot();
-            shootTimer = SHOOT_RESET;
+            if (initialHeight * currHeight < 0)
+            {
+                heightPass = true;
+            }
+
+            shootTimer -= Time.deltaTime;
+
+            if (shootTimer <= 0 && shipState == ShipState.RAGE)
+            {
+                Shoot();
+                shootTimer = SHOOT_RESET;
+            }
         }
     }
 
@@ -222,7 +240,7 @@ public class ShipController : MonoBehaviour
         else if (Vector2.Distance(player.transform.position, transform.position) <= 0.25f)
         {
             Kamikaze();
-            player.GetComponent<PlayerController>().hitPoints = 0;
+            player.GetComponent<PlayerController>().hitPoints -= 4;
         }
 
         MoveShip(moveTo);
@@ -248,9 +266,12 @@ public class ShipController : MonoBehaviour
 
     public void Kamikaze()
     {
-        //Explosions haven't been figured out yet
-        Debug.Log("KAMIKAZE!");
-        Destroy(gameObject);      
+        if (kamikazeEnabled)
+        {
+            Debug.Log("KAMIKAZE!");
+            Destroy(gameObject);   
+        }
+           
     }
 
     private void OnCollisionEnter2D(Collision2D other)

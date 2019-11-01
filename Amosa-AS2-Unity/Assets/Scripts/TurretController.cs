@@ -16,7 +16,6 @@ public class TurretController : MonoBehaviour
     public GameObject hub;
     private Formation formation;
 
-    public bool kamikazeEnabled;
 
     public float shipSpeed;
     public float DEFAULT_SHIP_SPEED;
@@ -39,20 +38,12 @@ public class TurretController : MonoBehaviour
     public int[] entryPattern6;
     public int nodeTracker;
     public int entryIndex;
+    public int hitPoints;
 
 
 
     private void Awake()
     {
-        if (tag != "Drone")
-        {
-            kamikazeEnabled = false;
-        }
-        else
-        {
-            kamikazeEnabled = true;
-        }
-
         entryPattern1 = new int[] { 10, 7, 9, 11, 10 };
         entryPattern2 = new int[] { 11, 6, 4, 1, 2 };
         entryPattern3 = new int[] { 10, 7, 6, 8, 7 };
@@ -150,6 +141,11 @@ public class TurretController : MonoBehaviour
 
     void Update() 
     {
+        if (hitPoints <= 0)
+        {
+            Destroy(gameObject);
+        }
+        
         if (shipState == ShipState.LINE)
         {
             shipSpeed = DEFAULT_SHIP_SPEED / 2f;

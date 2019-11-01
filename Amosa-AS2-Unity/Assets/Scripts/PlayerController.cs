@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
         playerSpeed = 3f;
         cannonChargeTimer = 0f;
         RECHARGE_TIME = 3f;
-        bulletForce = 3.5f;
+        bulletForce = 1.75f;
         forward = new Vector2(0, 0);
         forwardHolder = transform.Find("forwardHolder");
     }
@@ -71,6 +71,11 @@ public class PlayerController : MonoBehaviour
 
     void Update() 
     {
+        if (hitPoints <= 0)
+        {
+            gameManager.isGamePaused = true;
+        }
+
         if (isFacingRight)
         {
             forward = Vector3.right;

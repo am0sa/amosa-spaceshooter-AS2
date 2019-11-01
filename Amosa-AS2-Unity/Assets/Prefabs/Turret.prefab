@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2213901153779222153}
   m_Layer: 11
   m_Name: Capsule (3)
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 5268942814284606829}
   m_Layer: 11
   m_Name: Capsule (4)
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 109576215861098779}
   m_Layer: 11
   m_Name: Capsule (2)
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 8814213437893636322}
   m_Layer: 11
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -326,7 +326,7 @@ GameObject:
   - component: {fileID: 436359101}
   m_Layer: 11
   m_Name: Capsule (1)
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -421,7 +421,7 @@ GameObject:
   - component: {fileID: 5433220547881131265}
   m_Layer: 11
   m_Name: Hub
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -518,7 +518,7 @@ GameObject:
   - component: {fileID: -7605181375293386697}
   m_Layer: 11
   m_Name: Turret
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -577,7 +577,6 @@ MonoBehaviour:
   enemyBulletPrefab: {fileID: 6389848966578153330, guid: 51ebc57eac554439a8e2a8cb9aa8ec3b,
     type: 3}
   hub: {fileID: 8814213439473232235}
-  kamikazeEnabled: 0
   shipSpeed: 0
   DEFAULT_SHIP_SPEED: 0
   bulletForce: 0
@@ -594,3 +593,4 @@ MonoBehaviour:
   entryPattern6: 
   nodeTracker: 0
   entryIndex: 0
+  hitPoints: 0

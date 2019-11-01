@@ -23,8 +23,18 @@ public class BulletPlus : MonoBehaviour
     {
         if (other.gameObject.layer == 11)
         {
-            other.gameObject.SetActive(false);
-            player.GetComponent<PlayerController>().scoreEarned += 20;
+            if (other.gameObject.tag == "Drone")
+            {
+                other.transform.parent.GetComponent<ShipController>().hitPoints -= 3;
+                player.GetComponent<PlayerController>().scoreEarned += 20;
+            }
+            
+
+            if (other.gameObject.tag == "Turret")
+            {
+                other.transform.parent.GetComponent<TurretController>().hitPoints--;
+                player.GetComponent<PlayerController>().scoreEarned += 50;
+            }
         }
     }
 }

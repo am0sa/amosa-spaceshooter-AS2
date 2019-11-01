@@ -23,8 +23,16 @@ public class Bullet1 : MonoBehaviour
     {
         if (other.gameObject.layer == 11)
         {
-            Debug.Log("Drone");
-            other.gameObject.SetActive(false);
+            if (other.gameObject.tag == "Drone")
+            {
+                other.gameObject.GetComponent<ShipController>().hitPoints--;
+            }
+
+            if (other.gameObject.tag == "Turret")
+            {
+                other.gameObject.GetComponent<TurretController>().hitPoints--;
+            }
+
             player.GetComponent<PlayerController>().scoreEarned += 10;
         }
         else if(other.gameObject.layer == 13)
