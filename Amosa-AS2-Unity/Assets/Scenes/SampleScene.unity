@@ -149,7 +149,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &35438208
 MonoBehaviour:
@@ -168,6 +168,7 @@ MonoBehaviour:
   turretPrefab: {fileID: 8814213439791836168, guid: b187e596a06c3453b9e6e325305ee5d2,
     type: 3}
   enemyContainer: {fileID: 2015191159}
+  bulletContainer: {fileID: 1804560664}
   menuOverlay: {fileID: 1284447022}
   player: {fileID: 0}
   gameTimer: 0
@@ -176,6 +177,7 @@ MonoBehaviour:
   eventOccurence: 
   eventTracker: 0
   invokeEventCounter: 
+  enemyCount: 0
 --- !u!1 &274406015
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,7 +325,7 @@ Transform:
   m_Children:
   - {fileID: 594655735}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &531625834
 GameObject:
@@ -389,7 +391,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &594655734
 GameObject:
@@ -1216,7 +1218,7 @@ Transform:
   - {fileID: 935651648}
   - {fileID: 274406019}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1284447022
 GameObject:
@@ -1246,7 +1248,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1429681028
 PrefabInstance:
@@ -1298,7 +1300,7 @@ PrefabInstance:
     - target: {fileID: 2427940674303246044, guid: 766e158ce96b64bff9750262cbe2bcb5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2427940674303246044, guid: 766e158ce96b64bff9750262cbe2bcb5,
         type: 3}
@@ -1417,7 +1419,7 @@ Transform:
   m_Children:
   - {fileID: 998488804}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1749919605
 GameObject:
@@ -1524,6 +1526,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1749919605}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1804560664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1804560665}
+  m_Layer: 0
+  m_Name: BulletContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1804560665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804560664}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1959570619
 GameObject:
   m_ObjectHideFlags: 0
@@ -1691,7 +1723,7 @@ Transform:
   - {fileID: 1959570620}
   - {fileID: 1177391389}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3516417921431686793
 PrefabInstance:
@@ -1743,7 +1775,7 @@ PrefabInstance:
     - target: {fileID: 3516417923250164750, guid: 97d96d8937414482f81e8d5aa9056f59,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3516417923250164750, guid: 97d96d8937414482f81e8d5aa9056f59,
         type: 3}

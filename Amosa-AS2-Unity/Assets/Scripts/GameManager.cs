@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject dronePrefab;
     public GameObject turretPrefab;
     public GameObject enemyContainer;
+    public GameObject bulletContainer;
     public GameObject menuOverlay;
     public PlayerController player;
     public float gameTimer;
@@ -15,10 +16,12 @@ public class GameManager : MonoBehaviour
     public bool[] eventOccurence;
     public int eventTracker;
     public int[] invokeEventCounter;
+    public int enemyCount;
 
     void Start() 
     {
         gameTimer = 0f;
+        enemyCount = 0;
         player = GameObject.Find("Player").GetComponent<PlayerController>();
 
         corners = new Vector3[4];
@@ -38,10 +41,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) /*&& isGamePaused*/)
+        enemyCount = enemyContainer.transform.childCount;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // UnpauseGame();
-            // Debug.Log("Paused: " + isGamePaused);
             isGamePaused =  (isGamePaused) ? UnpauseGame() : PauseGame();
         }
 
@@ -49,14 +52,12 @@ public class GameManager : MonoBehaviour
         {
             gameTimer += Time.deltaTime;
 
-            // if (Input.GetKeyDown(KeyCode.Escape))
-            // {
-            //     PauseGame();
-            // }
-
             if (player.hitPoints <= 0)
             {
                 player.gameObject.SetActive(false);
+                gameTimer = 0;
+                ClearAll();
+                PauseGame();
             }
 
             if (gameTimer >= 3 && (int)gameTimer%1 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[0])
@@ -79,6 +80,9 @@ public class GameManager : MonoBehaviour
                 {
                     SpawnTurret(4, 12);
                     SpawnBossDrone(3);
+                    SpawnBossDrone(1);
+                    SpawnBossDrone(4);
+                    SpawnTurret(2, 15);
                     eventOccurence[1] = true;
                 }
             }
@@ -95,7 +99,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            if (gameTimer > 95 && (int)gameTimer%2 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[2])
+            if (gameTimer > 85 && (int)gameTimer%2 == 0 && gameTimer - (int)gameTimer <= 0.01 && !eventOccurence[2])
             {
                 SpawnTurret(2, 15);
                 SpawnDrone(4, 4);
@@ -132,15 +136,29 @@ public class GameManager : MonoBehaviour
 
             if (gameTimer >= 140)
             {
-                if (enemyContainer)
+                if (enemyCount == 0)
                 {
-                    
+                    PauseGame();
+                    Debug.Log("GAME CLEAR");
                 }
             }
 
         }
 
 
+    }
+
+    public void ClearAll()
+    {
+        foreach (Transform child in enemyContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in bulletContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     public bool UnpauseGame()
@@ -156,12 +174,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         menuOverlay.SetActive(true);
         return true;
-        // if (!isGamePaused)
-        // {
-        //     Time.timeScale = 0;
-        //     isGamePaused = true;
-        //     menuOverlay.SetActive(true);
-        // }
     }
 
     public void SpawnDrone(int locator, int hitPoints = 1)

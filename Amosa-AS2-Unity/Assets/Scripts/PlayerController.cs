@@ -73,11 +73,6 @@ public class PlayerController : MonoBehaviour
     {
         if (!gameManager.isGamePaused)
         {
-            if (hitPoints <= 0)
-            {
-                gameManager.isGamePaused = true;
-            }
-
             if (isFacingRight)
             {
                 forward = Vector3.right;

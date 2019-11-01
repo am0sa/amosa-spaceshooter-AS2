@@ -5,10 +5,12 @@ using UnityEngine;
 public class Bullet1 : MonoBehaviour
 {
     public GameObject player;
+    public GameObject bulletContainer;
 
     void Start()
     {
         player = GameObject.Find("Player");
+        bulletContainer = GameObject.Find("BulletContainer");
     }
 
     void Update()
