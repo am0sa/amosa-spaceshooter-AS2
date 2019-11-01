@@ -169,6 +169,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            pew.Play();
             transform.position = (Vector3)destination;
             return true;
         }
@@ -239,7 +240,6 @@ public class PlayerController : MonoBehaviour
                 break;
             
         }
-        pew.Play();
     }
 
 
