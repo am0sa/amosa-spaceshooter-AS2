@@ -38,20 +38,21 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && isGamePaused)
+        if (Input.GetKeyDown(KeyCode.Escape) /*&& isGamePaused*/)
         {
-            UnpauseGame();
-            Debug.Log("Paused: " + isGamePaused);
+            // UnpauseGame();
+            // Debug.Log("Paused: " + isGamePaused);
+            isGamePaused =  (isGamePaused) ? UnpauseGame() : PauseGame();
         }
 
         if (!isGamePaused)
         {
             gameTimer += Time.deltaTime;
 
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                PauseGame();
-            }
+            // if (Input.GetKeyDown(KeyCode.Escape))
+            // {
+            //     PauseGame();
+            // }
 
             if (player.hitPoints <= 0)
             {
@@ -142,26 +143,25 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void UnpauseGame()
+    public bool UnpauseGame()
     {
-        if (isGamePaused)
-        {
-            
-            Time.timeScale = 1;
-            Debug.Log("TimeScale " + Time.timeScale);
-            isGamePaused = !isGamePaused;
-            menuOverlay.SetActive(false);
-        }
+        Time.timeScale = 1;
+        menuOverlay.SetActive(false);
+        return false;
+
     }
 
-    public void PauseGame()
+    public bool PauseGame()
     {
-        if (!isGamePaused)
-        {
-            Time.timeScale = 0;
-            isGamePaused = true;
-            menuOverlay.SetActive(true);
-        }
+        Time.timeScale = 0;
+        menuOverlay.SetActive(true);
+        return true;
+        // if (!isGamePaused)
+        // {
+        //     Time.timeScale = 0;
+        //     isGamePaused = true;
+        //     menuOverlay.SetActive(true);
+        // }
     }
 
     public void SpawnDrone(int locator, int hitPoints = 1)
